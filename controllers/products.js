@@ -3,7 +3,7 @@ const MyModel = require("../models/productSchema");
 
 const getAllProducts = async(req, res) => {
 
-    const { company, name, featured } = req.query;
+    const { company, name, featured, sort, select } = req.query;
 
     const queryObj = {};
 
@@ -19,7 +19,19 @@ const getAllProducts = async(req, res) => {
         queryObj.featured = { $regex: featured, $options: "i"}
     }
 
-    const myData = await MyModel.find(queryObj);
+    let apiData = MyModel.find(queryObj);
+
+    if(sort) {
+        let sortQ = sort.split(",").join(" ");
+        apiData = apiData.sort(sortQ);
+    }
+
+    if(select){
+        let selectQ = select.split(",").join(" ");
+        apiData = apiData.select(selectQ);
+    }
+
+    const myData = await apiData;
     res.status(200).json({ myData});
 }
 
