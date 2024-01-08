@@ -3,7 +3,7 @@ const MyModel = require("../models/productSchema");
 
 const getAllProducts = async(req, res) => {
 
-    const { company, name, featured, sort, select } = req.query;
+    const { company, name, featured, sort, select, page, limit } = req.query;
 
     const queryObj = {};
 
@@ -31,8 +31,15 @@ const getAllProducts = async(req, res) => {
         apiData = apiData.select(selectQ);
     }
 
+    let pageNum = Number(page) || 1;
+    let limitVal = Number(limit) || 3;
+
+    let skip = (pageNum - 1) * limitVal;
+
+    apiData = apiData.skip(skip).limit(limitVal);
+
     const myData = await apiData;
-    res.status(200).json({ myData});
+    res.status(200).json({ myData, len: myData.length});
 }
 
 const getAllProductsTest = async(req, res) => {
