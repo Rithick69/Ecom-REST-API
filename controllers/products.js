@@ -47,4 +47,8 @@ const getAllProductsTest = async(req, res) => {
     res.status(200).json({ myData});
 }
 
-module.exports = { getAllProducts, getAllProductsTest };
+const saveProducts = async(req, res) => {    
+    res.status(200).send("ok");
+}
+
+module.exports = { getAllProducts, getAllProductsTest, saveProducts };
