@@ -21,8 +21,7 @@ const productSchema = new mongoose.Schema({
         required: [true, "price must be provided"],
     },
     colors: {
-        type: Array,
-        default: []
+        type: [String],
     },
     image: {
         type: String,

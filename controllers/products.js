@@ -47,7 +47,15 @@ const getAllProductsTest = async(req, res) => {
     res.status(200).json({ myData});
 }
 
-const saveProducts = async(req, res) => {    
+const saveProducts = async(req, res) => {
+    const createPayload = req.body;
+
+    // if (!parsedPayload.success) {
+    //     res.status(411).json({
+    //         msg: "You sent the wrong inputs",
+    //     })
+    //     return;
+    // }
     res.status(200).send("ok");
 }
 

@@ -8,16 +8,17 @@ const connectDB = require("./db/connect");
 
 const { DBuri } = require("./config");
 
-const MyModel = require("./models/productSchema");
+const MyModel = require("./models/singleProdSchema");
 
-const ProductData = require("./productsData.json");
+const Data = require("./apiData/products_serialnob.json");
 
 
 const start = async () => {
     try{
         await connectDB(DBuri);
-        await MyModel.deleteMany();
-        await MyModel.create(ProductData);
+        // await MyModel.deleteMany();
+        // await MyModel.create(ProductData);
+        await MyModel.create(Data);
         console.log("succees");
     } catch (e) {
         console.log(e)
