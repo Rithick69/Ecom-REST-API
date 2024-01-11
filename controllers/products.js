@@ -48,15 +48,18 @@ const getAllProductsTest = async(req, res) => {
 }
 
 const saveProducts = async(req, res) => {
-    const createPayload = req.body;
+    try{
+        const createPayload = req.body;
+        await MyModel.insertOne(createPayload);
+        console.log("Product saved");
+        res.status(200).send("ok");
 
-    // if (!parsedPayload.success) {
-    //     res.status(411).json({
-    //         msg: "You sent the wrong inputs",
-    //     })
-    //     return;
-    // }
-    res.status(200).send("ok");
+    } catch (e) {
+        console.log(e)
+        res.status(411).json({
+            msg: `Something went wrong ${e}`,
+        })
+    }
 }
 
 module.exports = { getAllProducts, getAllProductsTest, saveProducts };

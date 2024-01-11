@@ -7,6 +7,7 @@ const app = express();
 const PORT =  port;
 
 const product_routes = require("./routes/products");
+const user_routes = require("./routes/user");
 
 const connectDB = require("./db/connect");
 
@@ -15,6 +16,8 @@ app.get("/", (req, res) => {
 });
 
 // middleware or to set up router
+
+app.use("/auth", user_routes);
 
 app.use("/api/products", product_routes);
 
