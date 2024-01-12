@@ -50,7 +50,7 @@ const getAllProductsTest = async(req, res) => {
 const saveProducts = async(req, res) => {
     try{
         const createPayload = req.body;
-        await MyModel.insertOne(createPayload);
+        await MyModel.create(createPayload);
         console.log("Product saved");
         res.status(200).send("ok");
 

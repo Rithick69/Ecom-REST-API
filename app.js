@@ -17,6 +17,8 @@ app.get("/", (req, res) => {
 
 // middleware or to set up router
 
+app.use(express.json());
+
 app.use("/auth", user_routes);
 
 app.use("/api/products", product_routes);
