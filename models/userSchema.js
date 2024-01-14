@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
         required: [true, "email must be provided"],
     },
     phone: {
-        type: Number
+        type: Number,
+        required:true
     },
     password: {
         type: String,
@@ -49,5 +50,9 @@ userSchema.pre('save', async function ( next ) {
 
 })
 
+
+userSchema.methods.comparePassword = async function(password) {
+    return await bcrypt.compare( password, this.password );
+};
 
 module.exports = mongoose.model("User", userSchema);

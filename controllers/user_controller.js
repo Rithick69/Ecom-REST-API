@@ -1,25 +1,23 @@
 
 const UserModel = require("../models/userSchema");
-const bcrypt = require("bcryptjs");
-const { generateAccessToken, generateRefreshToken } = require("../util/tokenizer")
-
-let refreshTokens = [];
+const { generateAccessToken, generateRefreshToken } = require("../util/tokenizer");
+const { cacheFunc, deleteToken, searchToken } = require("../util/cacher");
 
 const refreshTokenFunc = async (req,res) => {
 
     try{
         const { email, token } = req.body;
 
-        if (!refreshTokens.includes(token)){
+        if (!searchToken(token)){
             return res.status(400).send("Refresh Token Invalid");
         }
 
-        refreshTokens = refreshTokens.filter((c) => c !== token);
+        deleteToken(token);
 
         const accessToken = await generateAccessToken({email});
         const refreshToken = await generateRefreshToken({email});
 
-        refreshTokens.push(refreshToken);
+        cacheFunc(refreshToken);
 
         return res.json ({ accessToken: accessToken, refreshToken: refreshToken });
 
@@ -32,7 +30,8 @@ const refreshTokenFunc = async (req,res) => {
 const logoutUser = async(req, res) => {
     try{
 
-        refreshTokens = refreshTokens.filter( (c) => c != req.body.token)
+        deleteToken(req.body.token);
+
         res.status(204).send("Logged out!")
 
     } catch (e){
@@ -47,27 +46,33 @@ const loginUser = async(req, res) => {
 
     try{
 
-        const { email } = req.body;
+        const { email, password } = req.body;
 
-        const user = await UserModel.findOne({email});
+        const user = await UserModel.findOne({ email });
 
-        if(user == null){
-            res.status(404).send("User does not exist");
+        if ( !user ) {
+            res.status(400).send("User does not exist");
         }
 
-        if(await bcrypt.compare(req.body.password, user.password)){
+        if ( await user.comparePassword(password) ) {
             const accessToken = await generateAccessToken(user);
             const refreshToken = await generateRefreshToken(user);
 
-            refreshTokens.push(refreshToken);
+            cacheFunc(refreshToken);
 
-            return res.status(200).json ({ accessToken: accessToken, refreshToken: refreshToken })
+            return res.status(200).json ({
+                msg: "Login Successful",
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+                userId: user._id.toString()
+            });
         }
 
-        return res.status(401).send("Password Incorrect!")
+        return res.status(401).send("Invalid Email or Password!")
 
     } catch (e){
         console.log(e);
+        return res.status(500).send("Internal Server Error");
     }
 };
 
@@ -86,7 +91,7 @@ const registerUser = async(req, res) => {
         const userCreated = await UserModel.create(payload);
         const refreshToken = await generateRefreshToken();
 
-        refreshTokens.push(refreshToken);
+        cacheFunc(refreshToken);
 
         res.status(200).json({
             msg: "User saved",
@@ -103,4 +108,4 @@ const registerUser = async(req, res) => {
     }
 };
 
-module.exports = {loginUser, registerUser, refreshTokenFunc, logoutUser};
+module.exports = { loginUser, registerUser, refreshTokenFunc, logoutUser };

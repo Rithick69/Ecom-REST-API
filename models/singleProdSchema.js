@@ -78,6 +78,10 @@ const singleProdSchema = new mongoose.Schema({
 		type: Number,
 		default: 4.9,
 	},
+	shipping: {
+        type: Boolean,
+        default: true,
+    },
 	image: {
 		type: [ImageSchema],
 		required: true,

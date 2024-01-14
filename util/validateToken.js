@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const {ACCESS_TOKEN} = require("../config");
+const { ACCESS_TOKEN } = require("../config");
+
 
 function validateToken (req, res, next){
 
@@ -22,4 +23,4 @@ function validateToken (req, res, next){
 
 }
 
-module.exports = validateToken;
+module.exports = { validateToken };
