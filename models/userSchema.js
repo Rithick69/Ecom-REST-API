@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+// const jwt = require("jsonwebtoken");
+
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -25,5 +28,26 @@ const userSchema = new mongoose.Schema({
         default: Date.now(),
     }
 });
+
+// secure password
+
+userSchema.pre('save', async function ( next ) {
+
+    if(!this.isModified('password')){
+        next(); //like continue
+    }
+
+    try{
+        const salt = await bcrypt.genSalt(10); // 10 is the salt round.
+        const hashPwd = await bcrypt.hash(this.password, salt);
+        this.password = hashPwd;
+
+    } catch ( error ) {
+
+        next(error);
+    }
+
+})
+
 
 module.exports = mongoose.model("User", userSchema);
