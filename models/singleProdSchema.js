@@ -52,6 +52,7 @@ const singleProdSchema = new mongoose.Schema({
 	},
 	colors: {
 		type: [String],
+		required: true
 	},
 	description: {
 		type: String,

@@ -10,7 +10,7 @@ const { DBuri } = require("./config");
 
 const MyModel = require("./models/singleProdSchema");
 
-const Data = require("./apiData/products_serialnob.json");
+const Data = require("./apiData/products_serialnoc.json");
 
 
 const start = async () => {
