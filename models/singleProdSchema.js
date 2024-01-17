@@ -44,7 +44,7 @@ const singleProdSchema = new mongoose.Schema({
 		enum: {
 			values: ['apple', 'samsung', 'dell', 'nokia', 'lenova', 'rolex', 'asus'],
 			message: `Value is not supported`,
-		},
+		}
 	},
 	price: {
 		type: Number,

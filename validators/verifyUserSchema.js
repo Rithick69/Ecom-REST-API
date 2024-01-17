@@ -31,6 +31,10 @@ const signupSchema = z.object({
         .trim()
         .min(7, {message: "Password must be of atleast 7 characters." })
         .max(1024, {message: "Password cannot be more than 1024 characters." }),
+    isAdmin: z
+        .boolean({
+            invalid_type_error: "isAdmin must be a boolean value"
+        }).optional(),
 });
 
 module.exports = signupSchema;
