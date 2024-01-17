@@ -1,4 +1,5 @@
 const MyModel = require("../models/productSchema");
+const singleProdModel = require("../models/singleProdSchema");
 
 
 const getAllProducts = async(req, res) => {
@@ -50,15 +51,15 @@ const getAllProductsTest = async(req, res) => {
 const saveProducts = async(req, res) => {
     try{
         const createPayload = req.body;
-        await MyModel.create(createPayload);
+        await singleProdModel.create(createPayload);
         console.log("Product saved");
-        res.status(200).send("ok");
+        res.status(200).send("Product saved");
 
     } catch (e) {
         console.log(e)
-        res.status(411).json({
-            msg: `Something went wrong ${e}`,
-        })
+        const message = "Internal Server Error";
+        const details = e;
+        next({status: 411, message, details});
     }
 }
 

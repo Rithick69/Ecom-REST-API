@@ -19,6 +19,9 @@ async function generateAccessToken (data) {
 
     } catch (error){
         console.log(error);
+        const message = "Failed to generate Access Token";
+        const details = error;
+        next({message, details});
     }
 };
 
@@ -36,6 +39,9 @@ async function generateRefreshToken (data) {
 
     } catch (error){
         console.log(error);
+        const message = "Failed to generate Refresh Token";
+        const details = error;
+        next({message, details});
     }
 };
 

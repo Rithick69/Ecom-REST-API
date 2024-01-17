@@ -6,9 +6,14 @@ const validate = (schema) => async(req, res, next) => {
         next();
 
     } catch(err){
-        res.status(400).json(
-            err.error
-        )
+        console.log(err.errors[0].message);
+        const status = 422;
+        const message = err.errors[0].message;
+        const error = {
+            status,
+            message
+        }
+        next(error);
     }
 }
 

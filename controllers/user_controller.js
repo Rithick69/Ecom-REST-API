@@ -23,6 +23,9 @@ const refreshTokenFunc = async (req,res) => {
 
     } catch (e){
         console.log(e);
+        const message = "Failed to Refresh Session";
+        const details = e;
+        next({message, details});
     }
 
 };
@@ -36,6 +39,9 @@ const logoutUser = async(req, res) => {
 
     } catch (e){
         console.log(e);
+        const message = "Internal Server Error";
+        const details = e;
+        next({message, details});
     }
 
 };
@@ -72,7 +78,9 @@ const loginUser = async(req, res) => {
 
     } catch (e){
         console.log(e);
-        return res.status(500).send("Internal Server Error");
+        const message = "Internal Server Error";
+        const details = e;
+        next({message, details});
     }
 };
 
@@ -102,9 +110,9 @@ const registerUser = async(req, res) => {
 
     } catch (e) {
         console.log(e)
-        res.status(411).json({
-            msg: `Something went wrong ${e}`,
-        })
+        const message = "Internal Server Error, Failed to Register User";
+        const details = e;
+        next({status: 411, message, details});
     }
 };
 

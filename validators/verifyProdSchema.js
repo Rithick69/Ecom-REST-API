@@ -94,7 +94,7 @@ const prodSchema = z.object({
             invalid_type_error: "Description must be a string"
         })
         .trim()
-        .min(20, {message: "Description must be of atleast 20 characters." }),
+        .min(20, {message: "Description must be of atleast 20 characters." }).optional(),
 
     category: z
         .string({
@@ -108,7 +108,7 @@ const prodSchema = z.object({
     featured: z
         .boolean({
             invalid_type_error: "Featured must be a boolean value"
-        }),
+        }).optional(),
 
     stock: z
         .number({
@@ -121,22 +121,22 @@ const prodSchema = z.object({
         .number({
             invalid_type_error: "Reviews must be a number"
         })
-        .safe().finite().gte(0),
+        .safe().finite().gte(0).optional(),
 
     stars: z
         .number({
             invalid_type_error: "Stars must be a number"
         })
-        .safe().finite().gte(0.0),
+        .safe().finite().gte(0.0).optional(),
 
     shipping: z
         .boolean({
             invalid_type_error: "Shipping must be a boolean value"
-        }),
+        }).optional(),
 
     image: z.array(imgSchema),
 
-    createdAt: z.date()
+    createdAt: z.date().optional()
 });
 
 module.exports = prodSchema;
