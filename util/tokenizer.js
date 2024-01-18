@@ -6,10 +6,11 @@ const { REFRESH_TOKEN, ACCESS_TOKEN } = require("../config");
 
 async function generateAccessToken (data) {
     try {
-        const { email } = data;
+        const { email, isAdmin } = data;
 
         return jwt.sign({
             email: email,
+            isAdmin: isAdmin
         },
         ACCESS_TOKEN,
         {
@@ -27,10 +28,11 @@ async function generateAccessToken (data) {
 
 async function generateRefreshToken (data) {
     try {
-        const { email } = data;
+        const { email, isAdmin } = data;
 
         return jwt.sign({
             email: email,
+            isAdmin: isAdmin
         },
         REFRESH_TOKEN,
         {
