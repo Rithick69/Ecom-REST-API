@@ -2,11 +2,12 @@
 const UserModel = require("../models/userSchema");
 const { generateAccessToken, generateRefreshToken } = require("../util/tokenizer");
 const { cacheFunc, deleteToken, searchToken } = require("../util/cacher");
+const { REFRESH_TOKEN } = require("../config");
 
 const refreshTokenFunc = async (req,res) => {
 
     try{
-        const { email, token } = req.body;
+        const { token } = req.body;
 
         if (!searchToken(token)){
             return res.status(400).send("Refresh Token Invalid");
@@ -14,8 +15,17 @@ const refreshTokenFunc = async (req,res) => {
 
         deleteToken(token);
 
-        const accessToken = await generateAccessToken({email});
-        const refreshToken = await generateRefreshToken({email});
+        const userData = jwt.verify(token, REFRESH_TOKEN, (err, data) => {
+            if (err) {
+                throw new Error({message: "Token invalid", status: "403"});
+                // return res.status(403).send("Token invalid")
+            } else {
+                return data;
+            }
+        });
+
+        const accessToken = await generateAccessToken(userData);
+        const refreshToken = await generateRefreshToken(userData);
 
         cacheFunc(refreshToken);
 
@@ -24,8 +34,9 @@ const refreshTokenFunc = async (req,res) => {
     } catch (e){
         console.log(e);
         const message = "Failed to Refresh Session";
-        const details = e;
-        next({message, details});
+        const details = e.message;
+        const status = e.status;
+        next({status, message, details});
     }
 
 };
@@ -97,13 +108,13 @@ const registerUser = async(req, res) => {
         const payload = {...req.body};
 
         const userCreated = await UserModel.create(payload);
-        const refreshToken = await generateRefreshToken();
+        const refreshToken = await generateRefreshToken(userCreated);
 
         cacheFunc(refreshToken);
 
         res.status(200).json({
             msg: "User saved",
-            accessToken: await generateAccessToken(),
+            accessToken: await generateAccessToken(userCreated),
             refreshToken: refreshToken,
             userId: userCreated._id.toString()
         });
