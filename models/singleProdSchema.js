@@ -4,6 +4,7 @@ const ImageSchema = new mongoose.Schema({
 	id: {
 		type: String,
 		required: true,
+		unique : true
 	},
 	width: {
 		type: Number,
@@ -34,10 +35,12 @@ const singleProdSchema = new mongoose.Schema({
 	id: {
 		type: String,
 		required: true,
+		unique : true
 	},
 	name: {
 		type: String,
 		required: true,
+		unique : true
 	},
 	company: {
 		type: String,

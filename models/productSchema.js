@@ -4,10 +4,12 @@ const productSchema = new mongoose.Schema({
     id: {
         type: String,
         required: true,
+        unique : true
     },
     name: {
         type: String,
         required: true,
+        unique : true
     },
     company: {
         type: String,

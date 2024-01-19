@@ -41,6 +41,22 @@ const refreshTokenFunc = async (req,res) => {
 
 };
 
+const updateUserDetails = async(req, res)=>{
+    try{
+
+        const userData = req.body;
+
+        const query = {email: userData.email};
+
+        await UserModel.updateOne(query, userData.payload);
+
+        res.status(200).json({msg:"User Details updated"})
+
+    } catch (e){
+        console.log(e);
+    }
+}
+
 const logoutUser = async(req, res) => {
     try{
 
