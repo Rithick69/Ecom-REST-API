@@ -51,6 +51,14 @@ const saveProducts = async (req, res) => {
 		if (req.user.isAdmin) {
 			const createPayload = req.body;
 			await singleProdModel.create(createPayload);
+
+			// I want to save the product data in the all products db.
+
+			const {id, name, company, price, colors, category, shipping, featured, rating, image} = createPayload;
+
+			const productPayload = {id, name, company, price, colors, category, shipping, featured, rating, image};
+
+			await MyModel.create(productPayload);
 			console.log('Product saved');
 			res.status(200).send('Product saved');
 		} else{
