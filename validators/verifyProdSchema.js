@@ -50,6 +50,11 @@ const imgSchema = z.object({
         })
         .positive().safe().finite(),
 
+    main: z
+        .boolean({
+            invalid_type_error: "Main Image must be a boolean value"
+        }).optional(),
+
     type: z
         .string({
         required_error:"Type is required",

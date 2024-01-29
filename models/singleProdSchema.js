@@ -25,6 +25,10 @@ const ImageSchema = new mongoose.Schema({
 		type: Number,
 		default: 1080,
 	},
+	main: {
+		type: Boolean,
+		default: false
+	},
 	type: {
 		type: String,
 		default: 'image/png',
