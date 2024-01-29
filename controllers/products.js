@@ -191,8 +191,8 @@ const updateProduct = async (req, res) => {
 				}
 			});
 
-			console.log('Product Deleted Successfully');
-			res.status(200).send('Product Deleted Successfully');
+			console.log('Product Updated Successfully');
+			res.status(200).send('Product Updated Successfully');
 		} else {
 			throw new Error({ msg: 'Access denied', status: 403 });
 		}
