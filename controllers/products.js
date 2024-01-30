@@ -64,7 +64,7 @@ const saveProducts = async (req, res) => {
 				category,
 				shipping,
 				featured,
-				rating,
+				stars,
 				image,
 			} = createPayload;
 
@@ -79,7 +79,7 @@ const saveProducts = async (req, res) => {
 				category,
 				shipping,
 				featured,
-				rating,
+				rating: stars,
 				mainImg,
 			};
 
@@ -135,41 +135,48 @@ const updateProduct = async (req, res) => {
 				shipping,
 				reviews,
 				stars,
-				stock,
+				stock
 			} = createPayload;
 
 			const ogProd = await singleProdModel.findOne({ id: id });
 
+			const productPayload = {};
+
 			if (featured) {
 				ogProd.featured = featured;
+				productPayload.featured = featured;
 			}
 
 			if (price) {
 				ogProd.price = price;
+				productPayload.price = price;
 			}
 
 			if (color) {
 				ogProd.colors = [...ogProd.colors, color];
+				productPayload.colors = ogProd.colors;
 			}
 
 			if (shipping) {
 				ogProd.shipping = shipping;
+				productPayload.shipping = shipping;
 			}
 
 			if (reviews) {
 				ogProd.reviews = reviews;
+				productPayload.reviews = reviews;
 			}
 
 			if (stars) {
-				ogProd.stars = stars;
+				const ratings = ogProd.numRatings + 1;
+				const finalStars = (((ogProd.numRatings + ogProd.stars) + stars)/ratings).toFixed(1);
+				ogProd.stars = finalStars;
+				productPayload.rating = finalStars;
 			}
 
 			if (stock) {
 				ogProd.stock = stock;
-			}
-
-			if (featured) {
-				ogProd.featured = featured;
+				productPayload.stock = stock;
 			}
 
 			if (image) {
@@ -180,9 +187,21 @@ const updateProduct = async (req, res) => {
 				});
 
 				ogProd.image = [...updatedArr, image];
+				productPayload.image = image;
 			}
 
-			await MyModel.findByIdAndUpdate(id, ogProd, function (err, docs) {
+			await singleProdModel.findByIdAndUpdate(id, ogProd, function (err, docs) {
+				if (err) {
+					console.log(err);
+					throw new Error({ msg: 'Error occured while updating' });
+				} else {
+					console.log('Updated User : ', docs);
+				}
+			});
+
+			// For Products Page
+
+			await MyModel.findByIdAndUpdate(id, productPayload, function (err, docs) {
 				if (err) {
 					console.log(err);
 					throw new Error({ msg: 'Error occured while updating' });
@@ -210,4 +229,5 @@ module.exports = {
 	getAllProductsTest,
 	saveProducts,
 	deleteProduct,
+	updateProduct
 };
