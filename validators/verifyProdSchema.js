@@ -134,6 +134,12 @@ const prodSchema = z.object({
         })
         .safe().finite().gte(0.0).optional(),
 
+    numRatings: z
+        .number({
+            invalid_type_error: "Number of Ratings value must be a number"
+        })
+        .safe().finite().gte(0).optional(),
+
     shipping: z
         .boolean({
             invalid_type_error: "Shipping must be a boolean value"

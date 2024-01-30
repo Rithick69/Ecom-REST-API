@@ -86,6 +86,12 @@ const singleProdSchema = new mongoose.Schema({
 		type: Number,
 		default: 4.9,
 	},
+
+	numRatings: {
+		type: Number,
+		default: 0,
+	},
+
 	shipping: {
         type: Boolean,
         default: true,
