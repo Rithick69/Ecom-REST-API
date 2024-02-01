@@ -2,13 +2,17 @@ const jwt = require("jsonwebtoken");
 const { ACCESS_TOKEN } = require("../config");
 
 
-function validateToken (req, res, next){
+const validateToken = async(req, res, next) => {
 
     //get token from request header
-    const authHeader = req.headers["authorization"]
-    const token = authHeader.split(" ")[1]
+    const authHeader = req.headers["authorization"];
+    const token = authHeader.split(" ")[1];
+
+    console.log("Token invalid1", token)
+
 
     if (token == null){
+        console.log("Token invalid")
         res.status(401).send("Token not present");
     }
 
@@ -28,4 +32,4 @@ function validateToken (req, res, next){
 
 }
 
-module.exports = { validateToken };
+module.exports = validateToken;

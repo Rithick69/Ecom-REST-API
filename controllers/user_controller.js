@@ -17,7 +17,9 @@ const refreshTokenFunc = async (req,res) => {
 
         const userData = jwt.verify(token, REFRESH_TOKEN, (err, data) => {
             if (err) {
-                throw new Error({message: "Token invalid", status: "403"});
+                const error = new Error("Token invalid");
+			    error.status = 403
+			    throw error;
                 // return res.status(403).send("Token invalid")
             } else {
                 return data;
@@ -143,4 +145,4 @@ const registerUser = async(req, res) => {
     }
 };
 
-module.exports = { loginUser, registerUser, refreshTokenFunc, logoutUser };
+module.exports = { loginUser, registerUser, refreshTokenFunc, logoutUser, updateUserDetails };
