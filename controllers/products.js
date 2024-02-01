@@ -87,12 +87,15 @@ const saveProducts = async (req, res) => {
 			console.log('Product saved');
 			res.status(200).send('Product saved');
 		} else {
-			throw new Error({ msg: 'Access denied', status: 403 });
+			const error = {};
+			error.message = new Error("Access denied");
+			error.status = 403;
+			throw error;
 		}
 	} catch (e) {
-		console.log(e);
+		console.log(e.message, e.status);
 		const message = 'Internal Server Error';
-		const details = e.msg;
+		const details = e.message;
 		const status = e.status | 411;
 		next({ status, message, details });
 	}
@@ -110,12 +113,14 @@ const deleteProduct = async (req, res) => {
 			console.log('Product Deleted Successfully');
 			res.status(200).send('Product Deleted Successfully');
 		} else {
-			throw new Error({ msg: 'Access denied', status: 403 });
+			const error = new Error("Access denied");
+			error.status = 403
+			throw error;
 		}
 	} catch (e) {
 		console.log(e);
 		const message = 'Internal Server Error';
-		const details = e.msg;
+		const details = e.message;
 		const status = e.status | 411;
 		next({ status, message, details });
 	}
@@ -193,7 +198,7 @@ const updateProduct = async (req, res) => {
 			await singleProdModel.findByIdAndUpdate(id, ogProd, function (err, docs) {
 				if (err) {
 					console.log(err);
-					throw new Error({ msg: 'Error occured while updating' });
+					throw new Error("Error occured while updating");
 				} else {
 					console.log('Updated User : ', docs);
 				}
@@ -204,7 +209,7 @@ const updateProduct = async (req, res) => {
 			await MyModel.findByIdAndUpdate(id, productPayload, function (err, docs) {
 				if (err) {
 					console.log(err);
-					throw new Error({ msg: 'Error occured while updating' });
+					throw new Error("Error occured while updating in all products db.");
 				} else {
 					console.log('Updated User : ', docs);
 				}
@@ -213,12 +218,14 @@ const updateProduct = async (req, res) => {
 			console.log('Product Updated Successfully');
 			res.status(200).send('Product Updated Successfully');
 		} else {
-			throw new Error({ msg: 'Access denied', status: 403 });
+			const error = new Error("Access denied");
+			error.status = 403
+			throw error;
 		}
 	} catch (e) {
 		console.log(e);
 		const message = 'Internal Server Error';
-		const details = e.msg;
+		const details = e.message;
 		const status = e.status | 411;
 		next({ status, message, details });
 	}
