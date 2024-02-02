@@ -46,7 +46,7 @@ const getAllProductsTest = async (req, res) => {
 	res.status(200).json({ myData });
 };
 
-const saveProducts = async (req, res) => {
+const saveProducts = async (req, res, next) => {
 	try {
 		if (req.user.isAdmin) {
 			const createPayload = req.body;
@@ -80,15 +80,14 @@ const saveProducts = async (req, res) => {
 				shipping,
 				featured,
 				rating: stars,
-				mainImg,
+				image: mainImg[0].url,
 			};
 
 			await MyModel.create(productPayload);
 			console.log('Product saved');
 			res.status(200).send('Product saved');
 		} else {
-			const error = {};
-			error.message = new Error("Access denied");
+			const error = new Error("Access denied");
 			error.status = 403;
 			throw error;
 		}
@@ -96,12 +95,12 @@ const saveProducts = async (req, res) => {
 		console.log(e.message, e.status);
 		const message = 'Internal Server Error';
 		const details = e.message;
-		const status = e.status | 411;
+		const status = e.status || 411;
 		next({ status, message, details });
 	}
 };
 
-const deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res, next) => {
 	try {
 		if (req.user.isAdmin) {
 			const { id } = req.query;
@@ -121,12 +120,12 @@ const deleteProduct = async (req, res) => {
 		console.log(e);
 		const message = 'Internal Server Error';
 		const details = e.message;
-		const status = e.status | 411;
+		const status = e.status || 411;
 		next({ status, message, details });
 	}
 };
 
-const updateProduct = async (req, res) => {
+const updateProduct = async (req, res, next) => {
 	try {
 		if (req.user.isAdmin) {
 			const createPayload = req.body;
@@ -226,7 +225,7 @@ const updateProduct = async (req, res) => {
 		console.log(e);
 		const message = 'Internal Server Error';
 		const details = e.message;
-		const status = e.status | 411;
+		const status = e.status || 411;
 		next({ status, message, details });
 	}
 };

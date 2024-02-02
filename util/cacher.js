@@ -6,7 +6,7 @@ function cacheFunc(token){
 };
 
 
-function deleteToken(token) {
+async function deleteToken(token) {
     refreshTokens = refreshTokens.filter((c) => c !== token);
     return;
 };
