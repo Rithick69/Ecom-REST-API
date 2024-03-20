@@ -10,7 +10,7 @@ const { getAllProducts, getAllProductsTest, saveProducts } = require("../control
 
 const combinedMiddleware = [validateToken, validate(prodSchema)];
 
-router.route("/").get(validateToken, getAllProducts);
+router.route("/").get(getAllProducts);
 router.route("/save").post(combinedMiddleware, saveProducts);
 router.route("/test").get(validateToken, getAllProductsTest);
 

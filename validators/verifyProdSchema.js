@@ -3,14 +3,6 @@ const { z } = require("zod");
 // Creating an object schema.
 
 const imgSchema = z.object({
-    id: z
-        .string({
-        required_error:"ID is required",
-        invalid_type_error: "ID must be a string"
-        })
-        .trim()
-        .min(8, {message: "ID must be of atleast 8 characters." })
-        .max(20, {message: "ID cannot be more than 20 characters." }),
 
     width: z
         .number({

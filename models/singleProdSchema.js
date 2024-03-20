@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 const ImageSchema = new mongoose.Schema({
-	id: {
-		type: String,
-		required: true,
-		unique : true
-	},
 	width: {
 		type: Number,
 		default: 1080,
