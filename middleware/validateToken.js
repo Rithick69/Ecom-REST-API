@@ -8,9 +8,6 @@ const validateToken = async(req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader.split(" ")[1];
 
-    console.log("Token invalid1", token)
-
-
     if (token == null){
         console.log("Token invalid")
         res.status(401).send("Token not present");

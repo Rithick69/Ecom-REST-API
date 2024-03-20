@@ -31,19 +31,19 @@ const getAllProducts = async (req, res) => {
 	}
 
 	let pageNum = Number(page) || 1;
-	let limitVal = Number(limit) || 3;
+	let limitVal = Number(limit) || 10;
 
 	let skip = (pageNum - 1) * limitVal;
 
 	apiData = apiData.skip(skip).limit(limitVal);
 
 	const myData = await apiData;
-	res.status(200).json({ myData, len: myData.length });
+	res.status(200).json(myData);
 };
 
 const getAllProductsTest = async (req, res) => {
 	const myData = await MyModel.find(req.query);
-	res.status(200).json({ myData });
+	res.status(200).json(myData);
 };
 
 const saveProducts = async (req, res, next) => {
@@ -87,7 +87,7 @@ const saveProducts = async (req, res, next) => {
 			console.log('Product saved');
 			res.status(200).send('Product saved');
 		} else {
-			const error = new Error("Access denied");
+			const error = new Error('Access denied');
 			error.status = 403;
 			throw error;
 		}
@@ -112,8 +112,8 @@ const deleteProduct = async (req, res, next) => {
 			console.log('Product Deleted Successfully');
 			res.status(200).send('Product Deleted Successfully');
 		} else {
-			const error = new Error("Access denied");
-			error.status = 403
+			const error = new Error('Access denied');
+			error.status = 403;
 			throw error;
 		}
 	} catch (e) {
@@ -139,7 +139,7 @@ const updateProduct = async (req, res, next) => {
 				shipping,
 				reviews,
 				stars,
-				stock
+				stock,
 			} = createPayload;
 
 			const ogProd = await singleProdModel.findOne({ id: id });
@@ -173,7 +173,10 @@ const updateProduct = async (req, res, next) => {
 
 			if (stars) {
 				const ratings = ogProd.numRatings + 1;
-				const finalStars = (((ogProd.numRatings + ogProd.stars) + stars)/ratings).toFixed(1);
+				const finalStars = (
+					(ogProd.numRatings + ogProd.stars + stars) /
+					ratings
+				).toFixed(1);
 				ogProd.stars = finalStars;
 				productPayload.rating = finalStars;
 			}
@@ -197,7 +200,7 @@ const updateProduct = async (req, res, next) => {
 			await singleProdModel.findByIdAndUpdate(id, ogProd, function (err, docs) {
 				if (err) {
 					console.log(err);
-					throw new Error("Error occured while updating");
+					throw new Error('Error occured while updating');
 				} else {
 					console.log('Updated User : ', docs);
 				}
@@ -208,7 +211,7 @@ const updateProduct = async (req, res, next) => {
 			await MyModel.findByIdAndUpdate(id, productPayload, function (err, docs) {
 				if (err) {
 					console.log(err);
-					throw new Error("Error occured while updating in all products db.");
+					throw new Error('Error occured while updating in all products db.');
 				} else {
 					console.log('Updated User : ', docs);
 				}
@@ -217,8 +220,8 @@ const updateProduct = async (req, res, next) => {
 			console.log('Product Updated Successfully');
 			res.status(200).send('Product Updated Successfully');
 		} else {
-			const error = new Error("Access denied");
-			error.status = 403
+			const error = new Error('Access denied');
+			error.status = 403;
 			throw error;
 		}
 	} catch (e) {
@@ -235,5 +238,5 @@ module.exports = {
 	getAllProductsTest,
 	saveProducts,
 	deleteProduct,
-	updateProduct
+	updateProduct,
 };
