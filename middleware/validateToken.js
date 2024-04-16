@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { ACCESS_TOKEN } = require('../config');
+const { ACCESS_TOKEN, REFRESH_TOKEN } = require('../config');
 const {
 	generateAccessToken,
 	generateRefreshToken,
@@ -27,7 +27,7 @@ const validateToken = async (req, res, next) => {
 					});
 				}
 
-				jwt.verify(refreshToken, SECRET_KEY, (err, decodedRefreshToken) => {
+				jwt.verify(refreshToken, REFRESH_TOKEN, (err, decodedRefreshToken) => {
 					if (err) {
 						// Refresh token verification failed (e.g., expired or invalid)
 						return res
